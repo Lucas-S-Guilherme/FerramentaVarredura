@@ -1,0 +1,17 @@
+Varredura em 192.168.1.1 - 2025-04-04 10:53:37.143287
+Tempo total: 0.50 segundos
+
+Porta 20/TCP: filtrada
+Porta 20/UDP: filtrada ou fechada
+Porta 21/TCP: filtrada
+Porta 21/UDP: filtrada ou fechada
+Porta 22/TCP: filtrada
+Porta 22/UDP: filtrada ou fechada
+Porta 23/TCP: filtrada
+Porta 23/UDP: filtrada ou fechada
+Porta 24/TCP: filtrada
+Porta 24/UDP: filtrada ou fechada
+Porta 25/TCP: filtrada
+Porta 25/UDP: filtrada ou fechada
+Porta 80/TCP: filtrada
+Porta 80/UDP: filtrada ou fechada

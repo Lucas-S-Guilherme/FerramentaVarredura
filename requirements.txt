@@ -1,0 +1,1 @@
+# Atualmente vazio, pois não há dependências externas além do Python padrão

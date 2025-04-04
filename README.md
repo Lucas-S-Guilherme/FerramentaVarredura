@@ -1,28 +1,68 @@
 # FerramentaVarredura
 
-Ferramenta de varredura de portas TCP e UDP para sistemas Linux.
+Ferramenta de varredura de portas TCP e UDP para sistemas Linux, com suporte opcional a Windows e macOS.
+
+## Funcionalidades 
+Varredura TCP (SYN) e UDP.
+
+Exportação de relatórios em TXT ou CSV.
+
+Progresso em tempo real durante a varredura.
+
+Suporte a múltiplas threads (100 por padrão).
+
 
 ## Requisitos
 - Python 3.8+
-- Ubuntu 24 (testado)
+- Ubuntu 24 (testado), compatível com outros sistemas Linux
+- Permissões de root para portas privilegiadas (< 1024)
+
+## Instalação
+1. Clone o repositório:
+   ```bash
+   $ git clone https://github.com/<seu_usuario>/FerramentaVarredura.git
+   $ cd FerramentaVarredura
+   $ chmod +x install.sh
+   $ ./install.sh
+   ```
 
 ## Uso
+
+Argumentos
+
+`<IP>`: Endereço IP alvo (ex.: 192.168.1.1).
+
+`<portas>`: Lista ou intervalo de portas (ex.: 20-25,80) ou "ALL" para todas (1-65535).
+
+`<protocolo>`: TCP, UDP ou BOTH.
+
+`[timeout]` (opcional): Tempo limite por porta em segundos (padrão: 1.0).
+
+`[formato_relatorio]` (opcional): "txt" ou "csv" (padrão: txt).
+
 ```bash
-python main.py <IP> <portas> <protocolo>
+python3 main.py <IP> <portas> <protocolo> [timeout] [formato_relatorio]
 ```
 
-## Varredura de portas específicas:
+> [!NOTE]
+> caso queira mudar o formato padrão do relatório, é obrigatório a passagem do argumento timeout, sem ele haverá o retorno do erro: Timeout inválido! Deve ser um número (ex.: 0.5)
+
+## Exemplos
+
+### Varredura Básica:
   
-`python main.py 192.168.1.1 20-25,80 TCP`
+`sudo python3 main.py 192.168.1.1 20-25,80 TCP`
 
     Varre as portas 20 a 25 e 80 usando TCP.
     
-## Varredura de todas as portas:
+## Varredura Completa:
 
-`python main.py 192.168.1.1 ALL TCP`
+```bash
+sudo python3 main.py 192.168.1.1 ALL BOTH 0.5 csv
+```
 
-    Varre todas as portas (1 a 65535) usando TCP.
-    
+Varre todas as portas com timeout de 0.5s e salva em CSV.
+
 ## Varredura TCP e UDP:
 
 `python main.py 192.168.1.1 20-25,80 BOTH`
