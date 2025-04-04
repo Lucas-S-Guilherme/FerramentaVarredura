@@ -28,6 +28,19 @@ Suporte a múltiplas threads (100 por padrão).
 
 ## Uso
 
+### Terminal bash
+```bash
+python3 main.py <IP> <portas> <protocolo> [timeout] [formato_relatorio]
+```
+
+### Interface Gráfica
+
+O programa também pode ser executado com uma interface gráfica:
+
+```bash
+python3 main.py --gui
+```
+
 Argumentos
 
 `<IP>`: Endereço IP alvo (ex.: 192.168.1.1).
@@ -40,9 +53,9 @@ Argumentos
 
 `[formato_relatorio]` (opcional): "txt" ou "csv" (padrão: txt).
 
-```bash
-python3 main.py <IP> <portas> <protocolo> [timeout] [formato_relatorio]
-```
+
+
+
 
 > [!NOTE]
 > caso queira mudar o formato padrão do relatório, é obrigatório a passagem do argumento timeout, sem ele haverá o retorno do erro: Timeout inválido! Deve ser um número (ex.: 0.5)
