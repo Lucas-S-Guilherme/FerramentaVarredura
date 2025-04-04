@@ -1,2 +1,3 @@
-# Atualmente vazio, pois não há dependências externas além do Python padrão
 colorama>=0.4.6
+Pillow>=9.0.0
+svgpathtools>=1.4.1; extra == 'gui'

@@ -1,6 +1,23 @@
-pycache/
+# Python
 __pycache__/
-.pyc
+*.py[cod]
+*$py.class
+
+# Virtualenv
+.venv/
+venv/
+
+# Relatórios de varredura
 relatorio_varredura_*.txt
 relatorio_varredura_*.csv
-venv/
+
+# Exceção - Permite o requirements.txt
+!requirements.txt
+
+# IDE
+.vscode/
+.idea/
+
+# Sistema
+.DS_Store
+Thumbs.db
