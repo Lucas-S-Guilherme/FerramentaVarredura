@@ -19,11 +19,15 @@ class PortScanner:
         self.start_time = None
         self.scanned_ports = {'TCP': 0, 'UDP': 0}
         self.port_status_counts = {'aberta': 0, 'fechada': 0, 'filtrada': 0, 'erro': 0}
+        self.active_sockets = []
+        self.should_stop = False
+
 
     def tcp_scan(self, port):
         """Realiza varredura TCP com pacotes SYN."""
         sock = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
         sock.settimeout(self.timeout)
+        self.active_sockets.append(sock) 
         try:
             result = sock.connect_ex((self.target, port))
             with self.lock:
@@ -49,6 +53,7 @@ class PortScanner:
         """Realiza varredura UDP simples."""
         sock = socket.socket(socket.AF_INET, socket.SOCK_DGRAM)
         sock.settimeout(self.timeout)
+        self.active_sockets.append(sock)
         try:
             sock.sendto(b"test", (self.target, port))
             sock.recvfrom(1024)  # Se responder, está aberta
@@ -76,7 +81,7 @@ class PortScanner:
 
     def worker(self):
         """Thread worker para processar portas da fila."""
-        while True:
+        while not self.should_stop:
             try:
                 port, protocol = self.queue.get_nowait()
                 if protocol == "TCP":
@@ -195,3 +200,13 @@ class PortScanner:
                     f.write(f"{port},{proto},{status}\n")
         
         print(f"\n{Fore.GREEN}Relatório salvo em: {filename}{Style.RESET_ALL}")
+
+    def close_all(self):
+        """Fecha todos os sockets abertos"""
+        self.should_stop = True
+        for sock in self.active_sockets:
+            try:
+                sock.close()
+            except:
+                pass
+        self.active_sockets = []

@@ -20,10 +20,12 @@ except ImportError:
 class PortScannerGUI:
     def __init__(self, root):
         self.root = root
+        self.root.protocol("WM_DELETE_WINDOW", self.on_close)
         self.root.title("🔍 Ferramenta Avançada de Varredura de Portas")
         self.root.geometry("1000x700")
         self.style = ttk.Style()
         self.configure_styles()
+        self.should_stop = False
         
         # Ícone base64 (substitua por seu ícone real ou remova)
         def setup_icon(self):
@@ -436,15 +438,21 @@ class PortScannerGUI:
             self.root.after(0, self.scan_complete)
 
     def stop_scan(self):
-        """Interrompe a varredura em andamento"""
-        if self.scanner and hasattr(self.scanner, 'queue'):
-            while not self.scanner.queue.empty():
-                try:
-                    self.scanner.queue.get_nowait()
-                    self.scanner.queue.task_done()
-                except:
-                    break
-                    
+        """Interrompe a varredura em andamento de forma segura"""
+        # 1. Sinaliza para todas as threads pararem
+        if hasattr(self, 'scanner') and self.scanner:
+            self.scanner.close_all()  # Usa o novo método que criamos
+            
+            # 2. Esvazia a fila de varredura (código existente)
+            if hasattr(self.scanner, 'queue'):
+                while not self.scanner.queue.empty() and not self.scanner.should_stop:
+                    try:
+                        self.scanner.queue.get_nowait()
+                        self.scanner.queue.task_done()
+                    except:
+                        break
+        
+        # 3. Atualiza a interface
         self.status_var.set("Varredura interrompida pelo usuário")
         self.scan_complete()
 
@@ -550,6 +558,22 @@ class PortScannerGUI:
                 messagebox.showinfo("Sucesso", f"Relatório salvo em:\n{filename}")
             except Exception as e:
                 messagebox.showerror("Erro", f"Falha ao exportar:\n{str(e)}")
+
+
+    def on_close(self):
+        """Método chamado quando a janela é fechada"""
+        self.should_stop = True  # Sinaliza para as threads pararem
+        
+        if hasattr(self, 'scan_thread') and self.scan_thread and self.scan_thread.is_alive():
+            self.stop_scan()  # Chama o método de parar varredura
+            self.root.after(100, self.on_close)  # Dá um tempo para finalizar
+            return
+        
+        # Fecha todas as conexões de socket se existirem
+        if hasattr(self, 'scanner') and self.scanner:
+            self.scanner.close_all()
+        
+        self.root.destroy()  # fecha a janela
 
 def main():
     root = tk.Tk()
