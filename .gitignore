@@ -1,6 +1,6 @@
 pycache/
 __pycache__/
 .pyc
-relatorio_varredura_.txt
+relatorio_varredura_*.txt
 relatorio_varredura_*.csv
 
